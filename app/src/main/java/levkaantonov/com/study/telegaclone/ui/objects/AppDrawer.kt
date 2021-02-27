@@ -12,7 +12,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import levkaantonov.com.study.telegaclone.R
-import levkaantonov.com.study.telegaclone.ui.SettingsFragment
+import levkaantonov.com.study.telegaclone.ui.fragments.SettingsFragment
 
 class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer

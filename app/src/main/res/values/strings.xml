@@ -2,4 +2,13 @@
     <string name="app_name">TelegaClone</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings_default_user_name">Waldemar</string>
+    <string name="settings_default_status">online</string>
+    <string name="settings_text_account">Аккаунт</string>
+    <string name="settings_default_number">+792101231</string>
+    <string name="settings_label_phone_number">Нажмите чтобы изменить номер телефона</string>
+    <string name="settings_default_login">Waldemar</string>
+    <string name="settings_label_login">Имя пользователя</string>
+    <string name="settings_default_bio">О себе</string>
+    <string name="settings_label_bio">Напишите немного о себе</string>
 </resources>

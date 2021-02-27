@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import levkaantonov.com.study.telegaclone.databinding.ActivityMainBinding
-import levkaantonov.com.study.telegaclone.ui.ChatsFragment
+import levkaantonov.com.study.telegaclone.ui.fragments.ChatsFragment
 import levkaantonov.com.study.telegaclone.ui.objects.AppDrawer
 
 class MainActivity : AppCompatActivity() {
