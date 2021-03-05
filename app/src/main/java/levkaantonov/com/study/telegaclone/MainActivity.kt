@@ -1,11 +1,15 @@
 package levkaantonov.com.study.telegaclone
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import levkaantonov.com.study.telegaclone.activities.RegisterActivity
 import levkaantonov.com.study.telegaclone.databinding.ActivityMainBinding
 import levkaantonov.com.study.telegaclone.ui.fragments.ChatsFragment
 import levkaantonov.com.study.telegaclone.ui.objects.AppDrawer
+import levkaantonov.com.study.telegaclone.utils.replaceActivity
+import levkaantonov.com.study.telegaclone.utils.replaceFragment
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
@@ -26,12 +30,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunctionality() {
+        if(true){
+            replaceActivity(RegisterActivity::class.java)
+            return
+        }
         setSupportActionBar(mToolbar)
         mAppDrawer.create()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.dataContainer, ChatsFragment())
-            .commit()
+        replaceFragment(ChatsFragment())
     }
 
 

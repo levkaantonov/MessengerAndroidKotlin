@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1056488562117",
+    "project_id": "telegaclone",
+    "storage_bucket": "telegaclone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056488562117:android:fe233585155e9ac83dffac",
+        "android_client_info": {
+          "package_name": "levkaantonov.com.study.telegaclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1056488562117-vnbv2bk0f212r9g2gguh4dajs1c2qkq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtvtFemqb7Et4WiTOOz-CJ-MQLSywNTpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056488562117-vnbv2bk0f212r9g2gguh4dajs1c2qkq1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

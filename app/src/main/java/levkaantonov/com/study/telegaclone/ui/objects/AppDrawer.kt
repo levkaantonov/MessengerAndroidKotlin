@@ -13,6 +13,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import levkaantonov.com.study.telegaclone.R
 import levkaantonov.com.study.telegaclone.ui.fragments.SettingsFragment
+import levkaantonov.com.study.telegaclone.utils.replaceFragment
 
 class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer
@@ -95,11 +96,7 @@ class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
                 ): Boolean {
                     when (position) {
                         7 -> {
-                            mainActivity.supportFragmentManager
-                                .beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.dataContainer, SettingsFragment())
-                                .commit()
+                            mainActivity.replaceFragment(SettingsFragment() )
                         }
                     }
                     return false
