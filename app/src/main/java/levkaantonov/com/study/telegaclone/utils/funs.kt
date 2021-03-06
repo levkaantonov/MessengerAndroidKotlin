@@ -18,12 +18,21 @@ fun AppCompatActivity.replaceActivity(activity: Class<out AppCompatActivity>){
     this.finish()
 }
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment){
+fun AppCompatActivity.replaceFragment(fragment: Fragment, addStack: Boolean = true){
+    if (addStack){
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.dataContainer, fragment)
+            .commit()
+        return
+    }
+
     supportFragmentManager
         .beginTransaction()
-        .addToBackStack(null)
         .replace(R.id.dataContainer, fragment)
         .commit()
+
 }
 
 fun Fragment.replaceFragment(fragment: Fragment){

@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.FirebaseAuth
 import levkaantonov.com.study.telegaclone.activities.RegisterActivity
 import levkaantonov.com.study.telegaclone.databinding.ActivityMainBinding
 import levkaantonov.com.study.telegaclone.ui.fragments.ChatsFragment
 import levkaantonov.com.study.telegaclone.ui.objects.AppDrawer
+import levkaantonov.com.study.telegaclone.utils.AUTH
 import levkaantonov.com.study.telegaclone.utils.replaceActivity
 import levkaantonov.com.study.telegaclone.utils.replaceFragment
 
@@ -30,18 +32,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunctionality() {
-        if(true){
+        if(AUTH.currentUser == null){
             replaceActivity(RegisterActivity::class.java)
             return
         }
         setSupportActionBar(mToolbar)
         mAppDrawer.create()
-        replaceFragment(ChatsFragment())
+        replaceFragment(ChatsFragment(), false)
     }
 
 
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
+        AUTH = FirebaseAuth.getInstance()
     }
 }
