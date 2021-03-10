@@ -7,18 +7,12 @@
     tools:context=".ui.fragments.EnterPhoneNumberFragment">
 
     <EditText
+        android:hint="@string/register_phone_hint"
         android:id="@+id/register_input_phone_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/horizontal_margin"
-        android:padding="@dimen/appPadding"
-        android:textColor="@color/colorBlack"
-        android:textSize="@dimen/normal_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints=""
-        android:inputType="phone"/>
+        style="@style/editText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/register_btn_next"
