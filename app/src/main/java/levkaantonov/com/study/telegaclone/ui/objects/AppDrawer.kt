@@ -1,6 +1,9 @@
 package levkaantonov.com.study.telegaclone.ui.objects
 
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,22 +15,28 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
+import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import levkaantonov.com.study.telegaclone.R
 import levkaantonov.com.study.telegaclone.ui.fragments.SettingsFragment
+import levkaantonov.com.study.telegaclone.utils.USER
+import levkaantonov.com.study.telegaclone.utils.downloadAndSetImage
 import levkaantonov.com.study.telegaclone.utils.replaceFragment
-import java.util.*
 
 class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer
     private lateinit var mHeader: AccountHeader
     private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var mCurrentProfile: ProfileDrawerItem
 
     fun create() {
+        initLoader()
         createHeader()
         createDrawer()
         mDrawerLayout = mDrawer.drawerLayout
     }
-    fun disableDrawer(){
+
+    fun disableDrawer() {
         mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = false
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -36,7 +45,7 @@ class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
         }
     }
 
-    fun enableDrawer(){
+    fun enableDrawer() {
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         mDrawer.actionBarDrawerToggle?.isDrawerIndicatorEnabled = true
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -117,7 +126,7 @@ class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
                 ): Boolean {
                     when (position) {
                         7 -> {
-                            mainActivity.replaceFragment(SettingsFragment() )
+                            mainActivity.replaceFragment(SettingsFragment())
                         }
                     }
                     return false
@@ -128,13 +137,34 @@ class AppDrawer(val mainActivity: AppCompatActivity, val toolbar: Toolbar) {
     }
 
     private fun createHeader() {
+        mCurrentProfile = ProfileDrawerItem()
+            .withName(USER.fullname)
+            .withEmail(USER.phone)
+            .withIcon(USER.photoUrl)
+            .withIdentifier(200)
+
         mHeader = AccountHeaderBuilder()
             .withActivity(mainActivity)
             .withHeaderBackground(R.drawable.header)
             .addProfiles(
-                ProfileDrawerItem()
-                    .withName("John Dou")
-                    .withEmail("+79018875612")
+                mCurrentProfile
             ).build()
+    }
+
+    fun updateHeader() {
+        mCurrentProfile
+            .withName(USER.fullname)
+            .withEmail(USER.phone)
+            .withIcon(USER.photoUrl)
+
+        mHeader.updateProfile(mCurrentProfile)
+    }
+
+    private fun initLoader() {
+        DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
+            override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable) {
+                imageView.downloadAndSetImage(uri.toString())
+            }
+        })
     }
 }

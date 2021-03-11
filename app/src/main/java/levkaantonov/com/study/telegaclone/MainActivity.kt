@@ -24,8 +24,28 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
         APP_ACTIVITY = this
-        initFields()
-        initFunctionality()
+        initFirebase() {
+            initUser() {
+                initFields()
+                initFunctionality()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        AppStates.updateState(AppStates.ONLINE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        AppStates.updateState(AppStates.OFFLINE)
+    }
+
+    private fun initFields() {
+        mToolbar = mBinding.mainToolbar
+        mAppDrawer = AppDrawer(this, mToolbar)
     }
 
     private fun initFunctionality() {
@@ -37,20 +57,5 @@ class MainActivity : AppCompatActivity() {
         mAppDrawer.create()
         replaceFragment(ChatsFragment(), false)
     }
-
-
-    private fun initFields() {
-        mToolbar = mBinding.mainToolbar
-        mAppDrawer = AppDrawer(this, mToolbar)
-        initFirebase()
-        initUser()
-    }
-
-    private fun initUser() {
-        REF_DB_ROOT.child(NODE_USERS).child(CURRENT_UID)
-            .addListenerForSingleValueEvent(AppValueEventListener{
-                USER = it.getValue(User::class.java) ?: User()
-            })
-    }
-
 }
+

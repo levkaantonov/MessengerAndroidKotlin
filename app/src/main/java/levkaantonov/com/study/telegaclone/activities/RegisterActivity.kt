@@ -21,7 +21,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        initFirebase()
+        initFirebase(){}
     }
 
     override fun onStart() {
