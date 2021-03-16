@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.fragments
+package levkaantonov.com.study.telegaclone.ui.fragments.register
 
 import androidx.fragment.app.Fragment
 import com.google.firebase.FirebaseException
@@ -9,11 +9,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 import levkaantonov.com.study.telegaclone.MainActivity
 import levkaantonov.com.study.telegaclone.R
-import levkaantonov.com.study.telegaclone.activities.RegisterActivity
-import levkaantonov.com.study.telegaclone.utils.AUTH
-import levkaantonov.com.study.telegaclone.utils.replaceActivity
-import levkaantonov.com.study.telegaclone.utils.replaceFragment
-import levkaantonov.com.study.telegaclone.utils.showToast
+import levkaantonov.com.study.telegaclone.utils.*
 import java.util.concurrent.TimeUnit
 
 class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) {
@@ -27,7 +23,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
                 AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
                     if (task.isSuccessful){
                         showToast("Добро пожаловать")
-                        (activity as RegisterActivity).replaceActivity(MainActivity::class.java)
+                        restartActivity()
                     } else showToast(task.exception?.message.toString())
                 }
             }
@@ -57,7 +53,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
         PhoneAuthProvider.verifyPhoneNumber(
             PhoneAuthOptions
                 .newBuilder(FirebaseAuth.getInstance())
-                .setActivity(activity as RegisterActivity)
+                .setActivity(APP_ACTIVITY)
                 .setCallbacks(mCallback)
                 .setPhoneNumber(mPhoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)

@@ -9,7 +9,6 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import levkaantonov.com.study.telegaclone.R
-import levkaantonov.com.study.telegaclone.activities.RegisterActivity
 import levkaantonov.com.study.telegaclone.utils.*
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
@@ -72,8 +71,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.settings_menu_exit -> {
+                AppStates.updateState(AppStates.OFFLINE)
                 AUTH.signOut()
-                APP_ACTIVITY.replaceActivity(RegisterActivity::class.java)
+                restartActivity()
             }
             R.id.settings_menu_change_name -> {
                 replaceFragment(ChangeNameFragment())

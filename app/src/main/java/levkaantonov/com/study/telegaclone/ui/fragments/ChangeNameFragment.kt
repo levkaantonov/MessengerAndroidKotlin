@@ -27,17 +27,6 @@ class ChangeNameFragment : BaseChangeFragment(R.layout.fragment_change_name) {
             showToast(getString(R.string.settings_toast_name_is_empty))
             return
         }
-
-        val fullName = "$name $surname"
-        REF_DB_ROOT
-            .child(NODE_USERS).child(CURRENT_UID).child(CHILD_FULLNAME)
-            .setValue(fullName).addOnCompleteListener {
-                if(it.isSuccessful){
-                    showToast(getString(R.string.toast_data_updated))
-                    USER.fullname = fullName
-                    APP_ACTIVITY.mAppDrawer.updateHeader()
-                    fragmentManager?.popBackStack()
-                }
-            }
+        updateFullName("$name $surname")
     }
 }

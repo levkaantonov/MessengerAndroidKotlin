@@ -1,6 +1,6 @@
 package levkaantonov.com.study.telegaclone.models
 
-data class User(
+data class UserModel(
     val id: String = "",
     var name: String = "",
     var bio: String = "",

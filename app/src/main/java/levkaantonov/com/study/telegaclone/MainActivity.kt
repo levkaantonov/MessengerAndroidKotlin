@@ -1,15 +1,16 @@
 package levkaantonov.com.study.telegaclone
 
-import android.content.Context
-import android.hardware.input.InputManager
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import levkaantonov.com.study.telegaclone.activities.RegisterActivity
+import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import levkaantonov.com.study.telegaclone.databinding.ActivityMainBinding
-import levkaantonov.com.study.telegaclone.models.User
-import levkaantonov.com.study.telegaclone.ui.fragments.ChatsFragment
+import levkaantonov.com.study.telegaclone.ui.fragments.MainFragment
+import levkaantonov.com.study.telegaclone.ui.fragments.register.EnterPhoneNumberFragment
 import levkaantonov.com.study.telegaclone.ui.objects.AppDrawer
 import levkaantonov.com.study.telegaclone.utils.*
 
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val mBinding get() = _binding!!
     lateinit var mAppDrawer: AppDrawer
-    private lateinit var mToolbar: Toolbar
+    lateinit var mToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
         initFirebase() {
             initUser() {
+                CoroutineScope(Dispatchers.IO).launch {
+                    initContacts()
+                }
                 initFields()
                 initFunctionality()
             }
@@ -45,17 +49,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
-        mAppDrawer = AppDrawer(this, mToolbar)
+        mAppDrawer = AppDrawer()
     }
 
     private fun initFunctionality() {
+        setSupportActionBar(mToolbar)
         if(AUTH.currentUser == null){
-            replaceActivity(RegisterActivity::class.java)
+            replaceFragment(EnterPhoneNumberFragment(), false)
             return
         }
-        setSupportActionBar(mToolbar)
         mAppDrawer.create()
-        replaceFragment(ChatsFragment(), false)
+        replaceFragment(MainFragment(), false)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+            initContacts()
+        }
     }
 }
 
