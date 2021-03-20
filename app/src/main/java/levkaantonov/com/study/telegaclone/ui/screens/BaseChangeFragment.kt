@@ -1,6 +1,5 @@
-package levkaantonov.com.study.telegaclone.ui.fragments
+package levkaantonov.com.study.telegaclone.ui.screens
 
-import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import levkaantonov.com.study.telegaclone.MainActivity

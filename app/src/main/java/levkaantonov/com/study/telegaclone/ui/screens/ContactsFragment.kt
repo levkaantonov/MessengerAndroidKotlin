@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.fragments
+package levkaantonov.com.study.telegaclone.ui.screens
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +12,9 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import levkaantonov.com.study.telegaclone.R
+import levkaantonov.com.study.telegaclone.database.*
 import levkaantonov.com.study.telegaclone.models.CommonModel
-import levkaantonov.com.study.telegaclone.ui.fragments.single_chat.SingleChatFragment
+import levkaantonov.com.study.telegaclone.ui.screens.single_chat.SingleChatFragment
 import levkaantonov.com.study.telegaclone.utils.*
 
 class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {

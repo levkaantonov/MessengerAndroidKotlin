@@ -1,5 +1,7 @@
 package levkaantonov.com.study.telegaclone.utils
 
+import levkaantonov.com.study.telegaclone.database.*
+
 enum class AppStates(val state: String) {
     ONLINE("в сети"),
     OFFLINE("был недавно"),

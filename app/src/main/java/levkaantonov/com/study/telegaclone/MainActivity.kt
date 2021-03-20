@@ -8,9 +8,12 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import levkaantonov.com.study.telegaclone.database.AUTH
+import levkaantonov.com.study.telegaclone.database.initFirebase
+import levkaantonov.com.study.telegaclone.database.initUser
 import levkaantonov.com.study.telegaclone.databinding.ActivityMainBinding
-import levkaantonov.com.study.telegaclone.ui.fragments.MainFragment
-import levkaantonov.com.study.telegaclone.ui.fragments.register.EnterPhoneNumberFragment
+import levkaantonov.com.study.telegaclone.ui.screens.MainFragment
+import levkaantonov.com.study.telegaclone.ui.screens.register.EnterPhoneNumberFragment
 import levkaantonov.com.study.telegaclone.ui.objects.AppDrawer
 import levkaantonov.com.study.telegaclone.utils.*
 
@@ -53,11 +56,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunctionality() {
-        setSupportActionBar(mToolbar)
         if(AUTH.currentUser == null){
             replaceFragment(EnterPhoneNumberFragment(), false)
             return
         }
+        setSupportActionBar(mToolbar)
         mAppDrawer.create()
         replaceFragment(MainFragment(), false)
     }

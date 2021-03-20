@@ -16,10 +16,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import levkaantonov.com.study.telegaclone.R
-import levkaantonov.com.study.telegaclone.ui.fragments.ContactsFragment
-import levkaantonov.com.study.telegaclone.ui.fragments.SettingsFragment
+import levkaantonov.com.study.telegaclone.ui.screens.ContactsFragment
+import levkaantonov.com.study.telegaclone.ui.screens.SettingsFragment
 import levkaantonov.com.study.telegaclone.utils.APP_ACTIVITY
-import levkaantonov.com.study.telegaclone.utils.USER
+import levkaantonov.com.study.telegaclone.database.USER
 import levkaantonov.com.study.telegaclone.utils.downloadAndSetImage
 import levkaantonov.com.study.telegaclone.utils.replaceFragment
 

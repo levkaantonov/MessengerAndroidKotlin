@@ -1,43 +1,20 @@
-package levkaantonov.com.study.telegaclone.utils
+package levkaantonov.com.study.telegaclone.database
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import levkaantonov.com.study.telegaclone.R
+import levkaantonov.com.study.telegaclone.database.*
 import levkaantonov.com.study.telegaclone.models.CommonModel
 import levkaantonov.com.study.telegaclone.models.UserModel
-
-lateinit var AUTH: FirebaseAuth
-lateinit var REF_DB_ROOT: DatabaseReference
-lateinit var REF_STORAGE_ROOT: StorageReference
-lateinit var USER: UserModel
-lateinit var CURRENT_UID: String
-
-const val TYPE_TXT = "text"
-
-const val NODE_USERS = "users"
-const val NODE_USERNAMES = "usernames"
-const val NODE_PHONES = "phones"
-const val NODE_PHONES_CONTACTS = "phones_contacts"
-const val FOLDER_PROFILE_IMAGE = "profile_image"
-const val NODE_MESSAGES = "messages"
-
-const val CHILD_ID = "id"
-const val CHILD_PHONE = "phone"
-const val CHILD_NAME = "name"
-const val CHILD_FULLNAME = "fullname"
-const val CHILD_BIO = "bio"
-const val CHILD_PHOTO_URL = "photoUrl"
-const val CHILD_STATE = "state"
-const val CHILD_TEXT = "text"
-const val CHILD_TYPE = "type"
-const val CHILD_FROM = "from"
-const val CHILD_TIMESTAMP = "timestamp"
+import levkaantonov.com.study.telegaclone.utils.APP_ACTIVITY
+import levkaantonov.com.study.telegaclone.utils.AppValueEventListener
+import levkaantonov.com.study.telegaclone.utils.showToast
+import java.io.File
 
 
 inline fun initFirebase(crossinline function: () -> Unit) {
@@ -65,7 +42,7 @@ inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url:
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-inline fun putImageToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
+inline fun putFileToStorage(uri: Uri, path: StorageReference, crossinline function: () -> Unit) {
     path.putFile(uri)
         .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }
@@ -75,8 +52,8 @@ inline fun initUser(crossinline function: () -> Unit) {
     REF_DB_ROOT.child(NODE_USERS).child(CURRENT_UID)
         .addListenerForSingleValueEvent(AppValueEventListener {
             USER = it.getValue(UserModel::class.java) ?: UserModel()
-            if (USER.name.isEmpty())
-                USER.name = CURRENT_UID
+            if (USER.username.isEmpty())
+                USER.username = CURRENT_UID
 
             function()
         })
@@ -139,8 +116,8 @@ fun sendMessage(msg: String, receivingUserId: String, typeTxt: String, function:
 
 fun tryUpdateUserName(newUserName: String) {
     REF_DB_ROOT.child(NODE_USERNAMES)
-        .addListenerForSingleValueEvent(AppValueEventListener{
-            if(it.hasChild(newUserName)){
+        .addListenerForSingleValueEvent(AppValueEventListener {
+            if (it.hasChild(newUserName)) {
                 showToast("Такой пользователь уже существует")
                 return@AppValueEventListener
             }
@@ -153,8 +130,8 @@ fun updateUserName(newUserName: String) {
     REF_DB_ROOT.child(NODE_USERNAMES).child(newUserName)
         .setValue(CURRENT_UID)
         .addOnCompleteListener { task ->
-            if(task.isSuccessful){
-                REF_DB_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_NAME)
+            if (task.isSuccessful) {
+                REF_DB_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_USERNAME)
                     .setValue(newUserName)
                     .addOnSuccessListener {
                         showToast(APP_ACTIVITY.getString(R.string.toast_data_updated))
@@ -167,11 +144,11 @@ fun updateUserName(newUserName: String) {
 }
 
 fun deleteOldUsername(newUserName: String) {
-    REF_DB_ROOT.child(NODE_USERNAMES).child(USER.name).removeValue()
+    REF_DB_ROOT.child(NODE_USERNAMES).child(USER.username).removeValue()
         .addOnSuccessListener {
             showToast(APP_ACTIVITY.getString(R.string.toast_data_updated))
             APP_ACTIVITY.supportFragmentManager.popBackStack()
-            USER.name = newUserName
+            USER.username = newUserName
         }.addOnFailureListener {
             showToast(it.message.toString())
         }
@@ -202,4 +179,64 @@ fun updateFullName(fullName: String) {
         }.addOnFailureListener {
             showToast(it.message.toString())
         }
+}
+
+
+fun sendMessageAsFile(
+    receivingUserID: String,
+    fileUrl: String,
+    messageKey: String,
+    typeMessage: String,
+    fileName: String
+) {
+
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserID"
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserID/$CURRENT_UID"
+
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[CHILD_FROM] = CURRENT_UID
+    mapMessage[CHILD_TYPE] = typeMessage
+    mapMessage[CHILD_ID] = messageKey
+    mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
+    mapMessage[CHILD_FILE_URL] = fileUrl
+    mapMessage[CHILD_TEXT] = fileName
+
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
+
+    REF_DB_ROOT
+        .updateChildren(mapDialog)
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+
+fun getMessageKey(id: String) = REF_DB_ROOT
+    .child(NODE_MESSAGES)
+    .child(CURRENT_UID)
+    .child(id).push().key.toString()
+
+
+fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String, fileName: String = "") {
+    val path = REF_STORAGE_ROOT.child(
+        FOLDER_FILES
+    ).child(messageKey)
+    putFileToStorage(uri, path) {
+        getUrlFromStorage(path) {
+            sendMessageAsFile(
+                receivedID,
+                it,
+                messageKey,
+                typeMessage,
+                fileName
+            )
+        }
+    }
+}
+
+fun getFileFromStorage(mFile: File, fileUrl: String, function: () -> Unit) {
+    val path = REF_STORAGE_ROOT.storage.getReferenceFromUrl(fileUrl)
+    path.getFile(mFile)
+        .addOnSuccessListener{ function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
 }

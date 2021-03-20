@@ -27,4 +27,6 @@
     <string name="settings_hint_input_username">username</string>
     <string name="settings_hint_input_bio">О себе</string>
     <string name="telegram">Telegram</string>
+    <string name="chat_input_hint_record">Запись...</string>
+    <string name="chat_input_hint_message">Сообщение...</string>
 </resources>

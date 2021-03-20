@@ -1,8 +1,9 @@
-package levkaantonov.com.study.telegaclone.ui.fragments
+package levkaantonov.com.study.telegaclone.ui.screens
 
 import kotlinx.android.synthetic.main.fragment_change_bio.*
 import levkaantonov.com.study.telegaclone.R
-import levkaantonov.com.study.telegaclone.utils.*
+import levkaantonov.com.study.telegaclone.database.USER
+import levkaantonov.com.study.telegaclone.database.updateBioToDb
 
 class ChangeBioFragment : BaseChangeFragment(R.layout.fragment_change_bio) {
     override fun onResume() {

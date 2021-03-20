@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.fragments.register
+package levkaantonov.com.study.telegaclone.ui.screens.register
 
 import androidx.fragment.app.Fragment
 import com.google.firebase.FirebaseException
@@ -7,8 +7,8 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
-import levkaantonov.com.study.telegaclone.MainActivity
 import levkaantonov.com.study.telegaclone.R
+import levkaantonov.com.study.telegaclone.database.AUTH
 import levkaantonov.com.study.telegaclone.utils.*
 import java.util.concurrent.TimeUnit
 
