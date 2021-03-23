@@ -9,8 +9,7 @@
         <item name="android:colorBackground">@color/colorAccent</item>
         <item name="popupTheme">@style/actionMenu</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="windowActionBar">false</item>
-        <item name="title">@string/telegram</item>
+<!--        <item name="windowActionBar">false</item>-->
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>

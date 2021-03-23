@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.screens
+package levkaantonov.com.study.telegaclone.ui.screens.contacts
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_contacts.*
 import levkaantonov.com.study.telegaclone.R
 import levkaantonov.com.study.telegaclone.database.*
 import levkaantonov.com.study.telegaclone.models.CommonModel
+import levkaantonov.com.study.telegaclone.ui.screens.base.BaseFragment
 import levkaantonov.com.study.telegaclone.ui.screens.single_chat.SingleChatFragment
 import levkaantonov.com.study.telegaclone.utils.*
 
@@ -27,7 +28,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
 
     override fun onResume() {
         super.onResume()
-        APP_ACTIVITY.title = "Контакты"
+        APP_ACTIVITY.title = getString(R.string.title_contacts)
         initRecyclerView()
     }
 
@@ -35,7 +36,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
         super.onPause()
         mAdapter.stopListening()
         println()
-        mapListeners.forEach{
+        mapListeners.forEach {
             it.key.removeEventListener(it.value)
         }
         println()
@@ -72,7 +73,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                     holder.photo.downloadAndSetImage(contact.photoUrl)
                     holder.name.text = contact.fullname
                     holder.itemView.setOnClickListener {
-                            replaceFragment(SingleChatFragment(model))
+                        replaceFragment(SingleChatFragment(model))
                     }
                 }
 

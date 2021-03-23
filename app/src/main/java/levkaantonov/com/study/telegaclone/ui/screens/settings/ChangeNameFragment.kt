@@ -1,9 +1,10 @@
-package levkaantonov.com.study.telegaclone.ui.screens
+package levkaantonov.com.study.telegaclone.ui.screens.settings
 
 import kotlinx.android.synthetic.main.fragment_change_name.*
 import levkaantonov.com.study.telegaclone.R
 import levkaantonov.com.study.telegaclone.database.USER
 import levkaantonov.com.study.telegaclone.database.updateFullName
+import levkaantonov.com.study.telegaclone.ui.screens.base.BaseChangeFragment
 import levkaantonov.com.study.telegaclone.utils.*
 
 class ChangeNameFragment : BaseChangeFragment(R.layout.fragment_change_name) {

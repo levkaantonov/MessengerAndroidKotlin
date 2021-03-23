@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.screens
+package levkaantonov.com.study.telegaclone.ui.screens.settings
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -10,12 +10,14 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import levkaantonov.com.study.telegaclone.R
 import levkaantonov.com.study.telegaclone.database.*
+import levkaantonov.com.study.telegaclone.ui.screens.base.BaseFragment
 import levkaantonov.com.study.telegaclone.utils.*
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
     override fun onResume() {
         super.onResume()
+        APP_ACTIVITY.title = getString(R.string.title_settings)
         setHasOptionsMenu(true)
         initFields()
     }

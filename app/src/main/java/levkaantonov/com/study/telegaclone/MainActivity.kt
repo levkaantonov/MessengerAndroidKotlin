@@ -12,7 +12,7 @@ import levkaantonov.com.study.telegaclone.database.AUTH
 import levkaantonov.com.study.telegaclone.database.initFirebase
 import levkaantonov.com.study.telegaclone.database.initUser
 import levkaantonov.com.study.telegaclone.databinding.ActivityMainBinding
-import levkaantonov.com.study.telegaclone.ui.screens.MainFragment
+import levkaantonov.com.study.telegaclone.ui.screens.main_list.MainListFragment
 import levkaantonov.com.study.telegaclone.ui.screens.register.EnterPhoneNumberFragment
 import levkaantonov.com.study.telegaclone.ui.objects.AppDrawer
 import levkaantonov.com.study.telegaclone.utils.*
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
         setSupportActionBar(mToolbar)
         mAppDrawer.create()
-        replaceFragment(MainFragment(), false)
+        replaceFragment(MainListFragment(), false)
     }
 
     override fun onRequestPermissionsResult(

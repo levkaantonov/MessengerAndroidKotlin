@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TelegaClone</string>
+    <string name="app_name">Telegram</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="settings_default_user_name">Waldemar</string>
@@ -26,7 +26,22 @@
     <string name="toast_data_updated">Данные обновлены</string>
     <string name="settings_hint_input_username">username</string>
     <string name="settings_hint_input_bio">О себе</string>
-    <string name="telegram">Telegram</string>
     <string name="chat_input_hint_record">Запись...</string>
     <string name="chat_input_hint_message">Сообщение...</string>
+    <string name="clear_chat">Очистить чат</string>
+    <string name="delete_chat">Удалить чат</string>
+    <string name="chat_deleted">Чат удален</string>
+    <string name="chat_cleared">Чат очищен</string>
+    <string name="add_into_group">Добавить участника</string>
+    <string name="create_group">Создать группу</string>
+    <string name="warning_add_contact">Добавьте участника</string>
+    <string name="title_contacts">Контакты</string>
+    <string name="title_settings">Настройки</string>
+    <string name="warning_input_name_of_group">Введите название группы</string>
+
+    <plurals name="count_members">
+        <item quantity="one">%d участник</item>
+        <item quantity="few">%d участника</item>
+        <item quantity="other">%d участников</item>
+    </plurals>
 </resources>

@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.screens
+package levkaantonov.com.study.telegaclone.ui.screens.base
 
 import android.view.*
 import androidx.fragment.app.Fragment

@@ -1,4 +1,4 @@
-package levkaantonov.com.study.telegaclone.ui.screens.single_chat
+package levkaantonov.com.study.telegaclone.ui.screens.groups
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -30,14 +30,14 @@ import levkaantonov.com.study.telegaclone.ui.message_recycler_view.views.AppView
 import levkaantonov.com.study.telegaclone.ui.screens.main_list.MainListFragment
 import levkaantonov.com.study.telegaclone.utils.*
 
-class SingleChatFragment(private val contact: CommonModel) :
+class GroupChatFragment(private val group: CommonModel) :
     BaseFragment(R.layout.fragment_single_chat) {
     private lateinit var mListenerInfoToolbar: AppValueEventListener
     private lateinit var mReceivingUser: UserModel
     private lateinit var mToolbarInfo: View
     private lateinit var mRefUser: DatabaseReference
     private lateinit var mRefMessages: DatabaseReference
-    private lateinit var mAdapter: SingleChatAdapter
+    private lateinit var mAdapter: GroupChatAdapter
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mMessagesListener: AppChildEventListener
     private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
@@ -92,7 +92,7 @@ class SingleChatFragment(private val contact: CommonModel) :
                                 R.color.primary
                             )
                         )
-                        val messageKey = getMessageKey(contact.id)
+                        val messageKey = getMessageKey(group.id)
                         mAppVoiceRecorder.startRecord(messageKey)
                     } else if (event.action == MotionEvent.ACTION_UP) {
                         //TODO stop record
@@ -102,7 +102,7 @@ class SingleChatFragment(private val contact: CommonModel) :
                             uploadFileToStorage(
                                 Uri.fromFile(file),
                                 messageKey,
-                                contact.id,
+                                group.id,
                                 TYPE_MESSAGE_VOICE
                             )
                             mSmoothScrollToPosition = true
@@ -142,15 +142,15 @@ class SingleChatFragment(private val contact: CommonModel) :
         when (requestCode) {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val uri = CropImage.getActivityResult(data).uri
-                val messageKey = getMessageKey(contact.id)
-                uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_IMAGE)
+                val messageKey = getMessageKey(group.id)
+                uploadFileToStorage(uri, messageKey, group.id, TYPE_MESSAGE_IMAGE)
                 mSmoothScrollToPosition = true
             }
             PICK_FILE_REQUEST_CODE -> {
                 val uri = data.data
-                val messageKey = getMessageKey(contact.id)
+                val messageKey = getMessageKey(group.id)
                 val fileName = getFilenameFromUri(uri!!)
-                uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_FILE, fileName)
+                uploadFileToStorage(uri, messageKey, group.id, TYPE_MESSAGE_FILE, fileName)
                 mSmoothScrollToPosition = true
             }
         }
@@ -158,11 +158,12 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     private fun initRecyclerView() {
         mRecyclerView = chat_recycler_view
-        mAdapter = SingleChatAdapter()
+        mAdapter = GroupChatAdapter()
+
         mRefMessages = REF_DB_ROOT
+            .child(NODE_GROUPS)
+            .child(group.id)
             .child(NODE_MESSAGES)
-            .child(CURRENT_UID)
-            .child(contact.id)
         mRecyclerView.adapter = mAdapter
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.isNestedScrollingEnabled = false
@@ -220,7 +221,7 @@ class SingleChatFragment(private val contact: CommonModel) :
             mReceivingUser = it.getUserModel()
             initInfoToolbar()
         }
-        mRefUser = REF_DB_ROOT.child(NODE_USERS).child(contact.id)
+        mRefUser = REF_DB_ROOT.child(NODE_USERS).child(group.id)
         mRefUser.addValueEventListener(mListenerInfoToolbar)
 
         chat_btn_send_message.setOnClickListener {
@@ -229,8 +230,7 @@ class SingleChatFragment(private val contact: CommonModel) :
             if (msg.isEmpty()) {
                 showToast("Введите сообщение")
             } else {
-                sendMessage(msg, contact.id, TYPE_MESSAGE_TEXT) {
-                    saveToMainList(contact.id, TYPE_CHAT)
+                sendMessageToGroup(msg, group.id, TYPE_MESSAGE_TEXT) {
                     chat_input_message.setText("")
                 }
             }
@@ -239,7 +239,7 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     private fun initInfoToolbar() {
         if (mReceivingUser.fullname.isEmpty()) {
-            mToolbarInfo.toolbar_info_fullname.text = contact.fullname
+            mToolbarInfo.toolbar_info_fullname.text = group.fullname
         } else {
             mToolbarInfo.toolbar_info_fullname.text = mReceivingUser.fullname
         }
@@ -268,11 +268,11 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_clear_chat -> clearChat(contact.id){
+            R.id.menu_clear_chat -> clearChat(group.id){
                 showToast(getString(R.string.chat_cleared))
                 replaceFragment(MainListFragment())
             }
-            R.id.menu_delete_chat -> deleteChat(contact.id){
+            R.id.menu_delete_chat -> deleteChat(group.id){
                 showToast(getString(R.string.chat_deleted))
                 replaceFragment(MainListFragment())
             }

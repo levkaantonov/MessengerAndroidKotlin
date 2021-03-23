@@ -68,7 +68,7 @@ fun initContacts() {
     }
 
     if (checkPermission(READ_CONTACTS)) {
-        var arrayOfContacts = arrayListOf<CommonModel>()
+        val arrayOfContacts = arrayListOf<CommonModel>()
         val cursor = APP_ACTIVITY.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
@@ -116,6 +116,8 @@ fun getFilenameFromUri(uri: Uri): String {
         return result
     }
 }
+
+fun getPlurals(count: Int) = APP_ACTIVITY.resources.getQuantityString(R.plurals.count_members, count, count)
 
 
 

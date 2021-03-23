@@ -13,8 +13,10 @@ import levkaantonov.com.study.telegaclone.models.CommonModel
 import levkaantonov.com.study.telegaclone.models.UserModel
 import levkaantonov.com.study.telegaclone.utils.APP_ACTIVITY
 import levkaantonov.com.study.telegaclone.utils.AppValueEventListener
+import levkaantonov.com.study.telegaclone.utils.TYPE_GROUP
 import levkaantonov.com.study.telegaclone.utils.showToast
 import java.io.File
+import java.util.HashMap
 
 
 inline fun initFirebase(crossinline function: () -> Unit) {
@@ -217,7 +219,13 @@ fun getMessageKey(id: String) = REF_DB_ROOT
     .child(id).push().key.toString()
 
 
-fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMessage: String, fileName: String = "") {
+fun uploadFileToStorage(
+    uri: Uri,
+    messageKey: String,
+    receivedID: String,
+    typeMessage: String,
+    fileName: String = ""
+) {
     val path = REF_STORAGE_ROOT.child(
         FOLDER_FILES
     ).child(messageKey)
@@ -237,6 +245,130 @@ fun uploadFileToStorage(uri: Uri, messageKey: String, receivedID: String, typeMe
 fun getFileFromStorage(mFile: File, fileUrl: String, function: () -> Unit) {
     val path = REF_STORAGE_ROOT.storage.getReferenceFromUrl(fileUrl)
     path.getFile(mFile)
-        .addOnSuccessListener{ function() }
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun saveToMainList(id: String, type: String) {
+    val refUser = "$NODE_MAIN_LIST/$CURRENT_UID/$id"
+    val refReceived = "$NODE_MAIN_LIST/$id/$CURRENT_UID"
+
+    val mapUser = hashMapOf<String, Any>()
+    val mapReceived = hashMapOf<String, Any>()
+
+    mapUser[CHILD_ID] = id
+    mapUser[CHILD_TYPE] = type
+
+    mapReceived[CHILD_ID] = CURRENT_UID
+    mapReceived[CHILD_TYPE] = type
+
+    val commonMap = hashMapOf<String, Any>()
+    commonMap[refUser] = mapUser
+    commonMap[refReceived] = mapReceived
+
+    REF_DB_ROOT.updateChildren(commonMap)
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+
+fun deleteChat(id: String, function: () -> Unit) {
+    REF_DB_ROOT
+        .child(NODE_MAIN_LIST)
+        .child(CURRENT_UID)
+        .child(id)
+        .removeValue()
+        .addOnFailureListener { showToast(it.message.toString()) }
+        .addOnSuccessListener { function() }
+}
+
+fun clearChat(id: String, function: () -> Unit) {
+    REF_DB_ROOT
+        .child(NODE_MESSAGES)
+        .child(CURRENT_UID)
+        .child(id)
+        .removeValue()
+        .addOnFailureListener { showToast(it.message.toString()) }
+        .addOnSuccessListener {
+            REF_DB_ROOT
+                .child(NODE_MESSAGES)
+                .child(id)
+                .child(CURRENT_UID)
+                .removeValue()
+                .addOnFailureListener { showToast(it.message.toString()) }
+                .addOnSuccessListener { function() }
+        }
+}
+
+fun createGroupInDatabase(
+    nameGroup: String,
+    uri: Uri,
+    listContacts: List<CommonModel>,
+    function: () -> Unit
+) {
+    val keyGroup = REF_DB_ROOT.child(NODE_GROUPS).push().key.toString()
+    val path = REF_DB_ROOT.child(NODE_GROUPS).child(keyGroup)
+
+    val mapData = hashMapOf<String, Any>()
+    mapData[CHILD_ID] = keyGroup
+    mapData[CHILD_FULLNAME] = nameGroup
+    mapData[CHILD_PHOTO_URL] = "empty"
+
+    val mapOfMembers = hashMapOf<String, Any>()
+    listContacts.forEach { mapOfMembers[it.id] = USER_MEMBER }
+    mapOfMembers[CURRENT_UID] = USER_CREATOR
+    mapData[NODE_MEMBERS] = mapOfMembers
+
+    path.updateChildren(mapData)
+        .addOnSuccessListener {
+            addGroupsToMainList(mapData, listContacts){
+                if(uri == Uri.EMPTY){
+                    function()
+                    return@addGroupsToMainList
+                }
+                val pathStorage = REF_STORAGE_ROOT.child(FOLDER_GROUPS_IMAGES).child(keyGroup)
+                putFileToStorage(uri, pathStorage) {
+                    getUrlFromStorage(pathStorage) { it ->
+                        path.child(CHILD_PHOTO_URL).setValue(it)
+                        function()
+                    }
+                }
+            }
+
+        }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun addGroupsToMainList(
+    mapData: HashMap<String, Any>,
+    listContacts: List<CommonModel>,
+    function: () -> Unit
+) {
+    val path = REF_DB_ROOT.child(NODE_MAIN_LIST)
+    val map = hashMapOf<String, Any>()
+    map[CHILD_ID] = mapData[CHILD_ID].toString()
+    map[CHILD_TYPE] = TYPE_GROUP
+    listContacts.forEach {
+        path.child(it.id).child(map[CHILD_ID].toString()).updateChildren(map)
+    }
+
+    path.child(CURRENT_UID).child(map[CHILD_ID].toString()).updateChildren(map)
+        .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun sendMessageToGroup(msg: String, groupId: String, typeTxt: String, function: () -> Unit) {
+    val refMessages = "$NODE_GROUPS/$groupId/$NODE_MESSAGES"
+    val msgKey = REF_DB_ROOT.child(refMessages).push().key
+
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[CHILD_FROM] = CURRENT_UID
+    mapMessage[CHILD_TYPE] = typeTxt
+    mapMessage[CHILD_TEXT] = msg
+    mapMessage[CHILD_ID] = msgKey.toString()
+    mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
+
+    REF_DB_ROOT.child(refMessages).child(msgKey.toString())
+        .updateChildren(mapMessage)
+        .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
