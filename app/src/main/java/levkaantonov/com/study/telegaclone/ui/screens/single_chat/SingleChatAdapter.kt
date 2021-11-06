@@ -1,10 +1,10 @@
 package levkaantonov.com.study.telegaclone.ui.screens.single_chat
 
-import android.os.Message
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import levkaantonov.com.study.telegaclone.ui.message_recycler_view.view_holders.*
+import levkaantonov.com.study.telegaclone.ui.message_recycler_view.view_holders.AppHolderFactory
+import levkaantonov.com.study.telegaclone.ui.message_recycler_view.view_holders.MessageHolder
 import levkaantonov.com.study.telegaclone.ui.message_recycler_view.views.MessageView
 
 class SingleChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

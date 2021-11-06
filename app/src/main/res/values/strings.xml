@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Telegram</string>
+    <string name="app_name">TelegaClone</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="settings_default_user_name">Waldemar</string>
@@ -38,6 +38,8 @@
     <string name="title_contacts">Контакты</string>
     <string name="title_settings">Настройки</string>
     <string name="warning_input_name_of_group">Введите название группы</string>
+    <string name="You_phone_number">Ваш номер телефона</string>
+    <string name="Welcome">Добро пожаловать</string>
 
     <plurals name="count_members">
         <item quantity="one">%d участник</item>

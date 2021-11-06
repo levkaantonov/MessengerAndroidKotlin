@@ -18,11 +18,12 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
 
     override fun onStart() {
         super.onStart()
+        APP_ACTIVITY.title = getString(R.string.You_phone_number)
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
                     if (task.isSuccessful){
-                        showToast("Добро пожаловать")
+                        showToast(getString(R.string.Welcome))
                         restartActivity()
                     } else showToast(task.exception?.message.toString())
                 }
@@ -54,9 +55,9 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
             PhoneAuthOptions
                 .newBuilder(FirebaseAuth.getInstance())
                 .setActivity(APP_ACTIVITY)
-                .setCallbacks(mCallback)
                 .setPhoneNumber(mPhoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)
+                .setCallbacks(mCallback)
                 .build()
         )
     }
